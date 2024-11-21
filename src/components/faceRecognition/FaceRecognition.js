@@ -192,8 +192,9 @@ const FaceRecognition = () => {
         :<></>
       }
 
-
-      <button onClick={captureImage} className="capture-button" style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}> Capture Image</button>
+      <div style={{ textAlign: 'center', padding: '10px' }}>
+        <button onClick={captureImage} className="capture-button" style={{ cursor: 'pointer', backgroundColor: 'green', color: 'white', padding: '15px', fontSize: '25px', border: 'none', borderRadius: '10px' }}> Capture Image</button>
+      </div>
       <div className="captured-images-container">
         {capturedImages.map((image, index) => (
           <img
