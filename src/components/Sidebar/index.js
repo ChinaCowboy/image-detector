@@ -4,13 +4,11 @@ import React, { useState } from "react";
 import logo from "../../assets/logo.svg";
 import Home from "../..//assets/home-solid.svg";
 import Team from "../../assets/social.svg";
-import ImageDetectorSvg from "../../assets/sceduled.svg";
-import Projects from "../../assets/starred.svg";
 import Documents from "../../assets/draft.svg";
 import PowerOff from "../../assets/power-off-solid.svg";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-
+import { AiTwotoneCamera,AiFillHome,AiOutlineTeam,AiFillFileUnknown } from "react-icons/ai";
 
 const Container = styled.div`
   position: fixed;
@@ -258,7 +256,7 @@ const Sidebar = () => {
             activeClassName="active"
             to="/imagedetector"
           >
-            <img src={ImageDetectorSvg} alt="ImageDetector" />
+            <AiTwotoneCamera alt="ImageDetector" />
             <Text clicked={click}>ImageDetector</Text>
           </Item>
           <Item
@@ -272,22 +270,22 @@ const Sidebar = () => {
           <Item
             onClick={() => setClick(false)}
             activeClassName="active"
-            to="/projects"
+            to="/ocr"
           >
-            <img src={Projects} alt="Projects" />
-            <Text clicked={click}>Projects</Text>
+            <AiFillFileUnknown alt="OCR" />
+            <Text clicked={click}>OCR</Text>
           </Item>
         </SlickBar>
 
         <Profile clicked={profileClick}>
           <img
             onClick={() => handleProfileClick()}
-            src="https://picsum.photos/200"
+            src="https://github.com/ChinaCowboy"
             alt="Profile"
           />
           <Details clicked={profileClick}>
             <Name>
-              <h4>Jhon&nbsp;Doe</h4>
+              <h4>Bing&nbsp;Niu</h4>
               <a href="/#">view&nbsp;profile</a>
             </Name>
 

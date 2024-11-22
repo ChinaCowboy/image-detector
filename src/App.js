@@ -7,7 +7,7 @@ import Home from "./pages/Home";
 import Team from "./pages/Team";
 import ImageDetectorPage from "./pages/ImageDetectorPage";
 import Documents from "./pages/Documents";
-import Projects from "./pages/Projects";
+import OcrPage from "./pages/OcrPage";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
 
@@ -40,7 +40,7 @@ function App() {
             <Route path="/team" element={<Team />} />
             <Route path="/imagedetector" element={<ImageDetectorPage />} />
             <Route path="/documents" element={<Documents />} />
-            <Route path="/projects" element={<Projects />} />
+            <Route path="/ocr" element={<OcrPage />} />
           </Routes>
         </AnimatePresence>
       </Pages>
