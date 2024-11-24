@@ -112,6 +112,17 @@ export function ObjectDetector(props)
     const normalizedPredictions = normalizePredictions(predictions, imgSize);
     setPredictions(normalizedPredictions);
     console.log("Predictions: ", predictions);
+
+    // cocoSsd.load().then(model => {
+    //   // detect objects in the image.
+    //   model.detect(imageElement).then(predictions => {
+    //     const normalizedPredictions = normalizePredictions(predictions, imgSize);
+    //     setPredictions(normalizedPredictions);
+    //     console.log("Predictions: ", predictions);
+    //       });
+    // });
+
+
   };
 
   const readImage = (file) => {

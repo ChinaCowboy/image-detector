@@ -8,7 +8,7 @@ import Documents from "../../assets/draft.svg";
 import PowerOff from "../../assets/power-off-solid.svg";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { AiTwotoneCamera,AiFillHome,AiOutlineTeam,AiFillFileUnknown } from "react-icons/ai";
+import { AiTwotoneCamera,AiFillHome,AiOutlineTeam,AiFillContacts, AiFillFileUnknown } from "react-icons/ai";
 
 const Container = styled.div`
   position: fixed;
@@ -217,13 +217,15 @@ const Logout = styled.button`
   }
 `;
 
+const iconstyle = { color: "white", fontSize: "1.5em" }
+
 const Sidebar = () => {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
 
   const [profileClick, setprofileClick] = useState(false);
   const handleProfileClick = () => setprofileClick(!profileClick);
-
+  let iconStyles = { color: "white", fontSize: "1.5em" };
   return (
     <Container>
       <Button clicked={click} onClick={() => handleClick()}>
@@ -240,7 +242,7 @@ const Sidebar = () => {
             activeClassName="active"
             to="/"
           >
-            <img src={Home} alt="Home" />
+            <AiFillHome style={iconstyle}></AiFillHome>
             <Text clicked={click}>Home</Text>
           </Item>
           <Item
@@ -248,7 +250,7 @@ const Sidebar = () => {
             activeClassName="active"
             to="/team"
           >
-            <img src={Team} alt="Team" />
+            <AiOutlineTeam style={iconstyle}/>
             <Text clicked={click}>Team</Text>
           </Item>
           <Item
@@ -256,7 +258,7 @@ const Sidebar = () => {
             activeClassName="active"
             to="/imagedetector"
           >
-            <AiTwotoneCamera alt="ImageDetector" />
+            <AiTwotoneCamera alt="ImageDetector" style={iconstyle}/>
             <Text clicked={click}>ImageDetector</Text>
           </Item>
           <Item
@@ -272,7 +274,7 @@ const Sidebar = () => {
             activeClassName="active"
             to="/objectdetection"
           >
-            <AiFillFileUnknown alt="Object Detection" />
+            <AiFillFileUnknown alt="Object Detection" style={iconstyle} />
             <Text clicked={click}>Object Detection</Text>
           </Item>
         </SlickBar>

@@ -26,6 +26,6 @@ const ObjectDetectionComponent = () => {
     );
   }
 
-  const OcrPage = MotionHoc(ObjectDetectionComponent);
+  const ObjectDetectionPage = MotionHoc(ObjectDetectionComponent);
 
-  export default ObjectDetection;
+  export default ObjectDetectionPage;
