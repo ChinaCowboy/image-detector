@@ -1,6 +1,7 @@
 import MotionHoc from "./MotionHoc";
 import styled from "styled-components";
 import {ObjectDetector} from '../components/objectDetector/objectDetector';
+import { ObjectDetection } from "face-api.js";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -13,7 +14,7 @@ const AppContainer = styled.div`
   color: #951010;
 `;
 
-const OcrComponent = () => {
+const ObjectDetectionComponent = () => {
   return (
     <>      
       <h1>Extract the text from image</h1>
@@ -25,6 +26,6 @@ const OcrComponent = () => {
     );
   }
 
-  const OcrPage = MotionHoc(OcrComponent);
+  const OcrPage = MotionHoc(ObjectDetectionComponent);
 
-  export default OcrPage;
+  export default ObjectDetection;
