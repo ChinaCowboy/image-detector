@@ -1,14 +1,32 @@
 import MotionHoc from "./MotionHoc";
-// import React, { Component } from 'react'
-// import ReactMarkdown from 'react-markdown'
-// import readme from './README.md'
+import React, { useState,useEffect } from 'react'
+import ReactMarkdown from 'react-markdown'
+import README from '../About.md'
+
 
 const HomeComponent = () => {
+  const [about, setAbout] = useState('');
 
-  return <h1>Home</h1>;
+  useEffect (()=>{
+    fetch(README)
+    .then((response) => response.text())
+    .then((text) => {
+      setAbout(text)
+      console.log(about);
+    });
+  },[]);
+
+  return (
+    // eslint-disable-next-line 
+    <ReactMarkdown  children = {about} /> 
+ );  
+
 };
+
 
 const Home = MotionHoc(HomeComponent);
 
 export default Home;
+
+
 
