@@ -25,6 +25,7 @@ const CaptureButton =styled.button`
 const SelectButton = styled.button`
 
   padding: 15px;
+
   /* border: 2px solid transparent; */
   background-color: #008000;
   color :#fff;
@@ -32,7 +33,7 @@ const SelectButton = styled.button`
   font-weight: 500;
   outline: none;
   //margin-top: 2em;
-  margin-left: 1em;
+  margin-left: 4em;
   cursor: pointer;
   transition: all 260ms ease-in-out;
   padding: 15px 20px;
@@ -64,8 +65,8 @@ const HiddenFileInput = styled.input`
   display: none;
 `;
 const TargetImg = styled.img`
-  height: 50%;
-  width: 50%;
+  height: 80%;
+  width: 80%;
 `;
 
 

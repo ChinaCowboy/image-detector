@@ -69,6 +69,9 @@ export default function OcrComponent() {
 
 
   return (
+    <>      
+    <h1>Extract text from the image</h1>
+    <div>
     <DetectionContainer>
         <div>
         {imgData && <TargetImg src={imgData} ref={imageRef} />}
@@ -77,6 +80,8 @@ export default function OcrComponent() {
           ref={fileInputRef}
           onChange={onSelectImage}
         />
+             </div>
+             </DetectionContainer>
         <div>
           <SelectButton onClick={openFilePicker}  disabled={isRecognizing}>
             {isRecognizing ? "Recognizing..." : "Select Image"}
@@ -88,9 +93,9 @@ export default function OcrComponent() {
         <div>
         {result && <pre>{result}</pre>} 
         </div>
-      </div>
-    </DetectionContainer>
-
+    </div>
+  
+    </>
 
     )
   }

@@ -36,7 +36,7 @@ function App() {
       <Pages>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route exact path="/" element={<Home />} />
+            <Route exact path="/image-detector" element={<Home />} />
             <Route path="/team" element={<Team />} />
             <Route path="/imagedetector" element={<ImageDetectorPage />} />
             <Route path="/ocr" element={<OrcPage/>} />
