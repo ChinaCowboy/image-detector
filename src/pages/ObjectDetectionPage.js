@@ -17,7 +17,7 @@ const AppContainer = styled.div`
 const ObjectDetectionComponent = () => {
   return (
     <>      
-      <h1>Extract the text from image</h1>
+      <h1>Detect the object from the image</h1>
       <div>
       <AppContainer/>
         <ObjectDetector />

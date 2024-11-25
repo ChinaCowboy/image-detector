@@ -264,17 +264,17 @@ const Sidebar = () => {
           <Item
             onClick={() => setClick(false)}
             activeClassName="active"
-            to="/documents"
+            to="/ocr"
           >
-            <img src={Documents} alt="Documents" />
-            <Text clicked={click}>Documents</Text>
+            <AiFillFileUnknown alt="OCR" style={iconstyle} />
+            <Text clicked={click}>Ocr</Text>
           </Item>
           <Item
             onClick={() => setClick(false)}
             activeClassName="active"
             to="/objectdetection"
           >
-            <AiFillFileUnknown alt="Object Detection" style={iconstyle} />
+            <AiFillContacts alt="Object Detection" style={iconstyle} />
             <Text clicked={click}>Object Detection</Text>
           </Item>
         </SlickBar>

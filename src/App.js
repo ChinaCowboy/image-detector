@@ -6,7 +6,7 @@ import Sidebar from "./components/Sidebar";
 import Home from "./pages/Home";
 import Team from "./pages/Team";
 import ImageDetectorPage from "./pages/ImageDetectorPage";
-import Documents from "./pages/Documents";
+import OrcPage from "./pages/OcrPage";
 import ObjectDetectionPage  from "./pages/ObjectDetectionPage";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
@@ -39,7 +39,7 @@ function App() {
             <Route exact path="/" element={<Home />} />
             <Route path="/team" element={<Team />} />
             <Route path="/imagedetector" element={<ImageDetectorPage />} />
-            <Route path="/documents" element={<Documents />} />
+            <Route path="/ocr" element={<OrcPage/>} />
             <Route path="/objectdetection" element={<ObjectDetectionPage />} />
           </Routes>
         </AnimatePresence>
