@@ -52,13 +52,13 @@ const SelectButton = styled.button`
 const DetectionContainer = styled.div`
   min-width: 200px;
   height: 500px;
-  border: 3px solid #fff;
+  border: 3px solid black;
   border-radius: 5px;
-  left :80px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  z-index: 19;
 `;
 
 const HiddenFileInput = styled.input`
@@ -68,7 +68,29 @@ const TargetImg = styled.img`
   height: 100%;
 `;
 
+const TargetBox = styled.div`
+  position: absolute;
+
+  left: ${({ x }) => x + "px"};
+  top: ${({ y }) => y + "px"};
+  width: ${({ width }) => width + "px"};
+  height: ${({ height }) => height + "px"};
+
+  border: 4px solid #1ac71a;
+  background-color: transparent;
+  z-index: 20;
+
+  &::before {
+    content: "${({ classType, score }) => `${classType} ${score.toFixed(1)}%`}";
+    color: #1ac71a;
+    font-weight: 500;
+    font-size: 17px;
+    position: absolute;
+    top: -1.5em;
+    left: -5px;
+  }
+`;
 
 
-export { SelectButton ,CaptureButton,HiddenFileInput,TargetImg,DetectionContainer};
+export { SelectButton ,CaptureButton,HiddenFileInput,TargetImg,DetectionContainer,TargetBox};
 
