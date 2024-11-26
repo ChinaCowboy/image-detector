@@ -65,8 +65,7 @@ const HiddenFileInput = styled.input`
   display: none;
 `;
 const TargetImg = styled.img`
-  height: 80%;
-  width: 80%;
+  height: 100%;
 `;
 
 
