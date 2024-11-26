@@ -2,7 +2,7 @@
 
 import { Headline,SelectButton,CaptureButton,HiddenFileInput,TargetImg,DetectionContainer } from '../style';
 import React, { useRef, useState } from "react";
-import { createWorker } from 'tesseract.js';
+import { createWorker,RecognizeOptions } from 'tesseract.js';
 import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
@@ -29,6 +29,9 @@ export default function OcrComponent() {
   const [layoutBlock, SetLayoutBlock] = useState([]);
   const [imageElementCopy, setimageElementCopy] = useState(null);
 
+  const recognizeOpt = {rotateAuto: true};
+
+
   const detectObjectsOnImage = async (file,imageElement) => {
     const worker = await createWorker(['chi_sim','eng']);
       setError(null);
@@ -54,8 +57,8 @@ export default function OcrComponent() {
   }
 
   const showBlocksOnImg = async (imageElement,words) => {
+    // https://blog.logrocket.com/how-to-extract-text-from-an-image-using-javascript-8fe282fb0e71/
     const imageElementCopy = document.createElement("img");
-  
     const imgData = await readImage(imageElement);
     imageElementCopy.src = imgData;
     imageElementCopy.onload = async () => {
@@ -86,7 +89,8 @@ export default function OcrComponent() {
       //imageElementCopy.appendChild(pond.current.imageElement);
       imageElementCopy.append(...wordsElements);
       console.log(...wordsElements);
-  }
+  };
+
   return (
     <>      
     <h1>Extract text from the image</h1>
@@ -122,4 +126,3 @@ export default function OcrComponent() {
 
     )
   }
-  
