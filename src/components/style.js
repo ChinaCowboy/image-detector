@@ -52,13 +52,12 @@ const SelectButton = styled.button`
 const DetectionContainer = styled.div`
   min-width: 200px;
   height: 500px;
-  border: 3px solid black;
+  border: 3px solid #fff;
   border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  z-index: 19;
 `;
 
 const HiddenFileInput = styled.input`

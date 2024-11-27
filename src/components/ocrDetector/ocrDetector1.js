@@ -13,9 +13,8 @@ const TargetBox = styled.div`
   width: ${({ width }) => width + "px"};
   height: ${({ height }) => height + "px"};
   border: 4px solid #0056b3;
-  background-color: black;
-  z-index: 200;
-
+  background-color: transparent;
+  z-index: 20;
   &::before {
     content: "${({ classType, score }) => `${classType} ${score.toFixed(1)}%`}";
     color: #1ac71a;
@@ -57,7 +56,26 @@ export default function OcrComponent() {
       fileReader.readAsDataURL(file);
     });
   };
+  const normalizePredictions = (words, imgSize) => {
+    if (!words || !imgSize || !imageRef) return words || [];
+    return words.map((word) => {
+      const bbox  = word.bbox;
+      const oldX = bbox.x0;
+      const oldY = bbox.y0;
+      const oldWidth = bbox.x1-bbox.x0;
+      const oldHeight = bbox.y1-bbox.y0;
 
+      const imgWidth = imageRef.current.width;
+      const imgHeight = imageRef.current.height;
+
+      const x = (oldX * imgWidth) / imgSize.width;
+      const y = (oldY * imgHeight) / imgSize.height;
+      const width = (oldWidth * imgWidth) / imgSize.width;
+      const height = (oldHeight * imgHeight) / imgSize.height;
+
+      return { ...word, bbox: {x0 : x, y0 :y , x1:x+width, y1:y+height} };
+    });
+  };
   const onSelectImage = async (e) => {
     setIsRecognizing(true);
     const file = e.target.files[0];
@@ -71,7 +89,7 @@ export default function OcrComponent() {
         height: imageElement.height,
       };
 
-      await detectObjectsOnImage(imageElement);
+      await detectObjectsOnImage(imageElement,imgSize);
  
       setIsRecognizing(false);
     };
@@ -81,7 +99,7 @@ export default function OcrComponent() {
     setImageUrl(URL.createObjectURL(e.target.files[0]));
   };
 
-  const detectObjectsOnImage = async (imageElement) => {
+  const detectObjectsOnImage = async (imageElement,imgSize) => {
     const worker = await createWorker(['chi_sim','eng']);
       setError(null);
       setResult('');
@@ -91,9 +109,12 @@ export default function OcrComponent() {
         const { data: {text,words}  } = await worker.recognize(imageElement);
         setResult(text);
         setPredictions(words);
+        const normalizedPredictions = normalizePredictions(words, imgSize);
+        setPredictions(normalizedPredictions);
+    
         console.log(text);
         console.log(words);
-
+        setIsRecognizing(false);
         // const wordsElements = 
         //   words.filter(({ confidence }) => {
         //     return confidence > 10;
@@ -125,25 +146,29 @@ export default function OcrComponent() {
 
 
   return (
-    <>      
-    <h1>Extract text from the image</h1>
-    <div>
+    // <>      
+    // <h1>Extract text from the image</h1>
+
     <ObjectDetectorContainer>
         <DetectionContainer>
-          {imgData && <TargetImg src={imgData} ref={imageRef} />}
-          {!isEmptyPredictions && predictions.map((word) => {
-            <TargetBox          
-            x= {word.bbox.x0}
-            y= {word.bbox.y0}
-            width = {word.bbox.x1}
-            height ={word.bbox.y1}  
-            // width= {word.bbox.x1-word.bbox.x0}
-            // height={word.bbox.y1-word.bbox.y0}
+          {imgData && <TargetImg src={imgData} ref={imageRef} />} 
+          {!isEmptyPredictions && predictions
+          .filter((word) => {
+            return word.confidence > 92.5;
+          })
+          .map((word,i) => (
+            <TargetBox        
+            key={i}  
+            x={word.bbox.x0}
+            width={word.bbox.x1-word.bbox.x0}
+            y={word.bbox.y0}
+            height={word.bbox.y1-word.bbox.y0}
             score={word.confidence}
+            classType= {word.text}
           />
-          })}
+          //console.log(word);
+          ))}
         </DetectionContainer>
-        <div>
         <HiddenFileInput
           type="file"
           ref={fileInputRef}
@@ -153,17 +178,13 @@ export default function OcrComponent() {
             {isRecognizing ? "Recognizing..." : "Select Image"}
           </SelectButton>
 
-        </div>
         </ObjectDetectorContainer>
-        {/* {error && <p>Error: {error}</p>}
-        <div>
-        {result && <pre>{result}</pre>} 
-        </div> */}
+        // {error && <p>Error: {error}</p>}
 
-    </div>
+        // {result && <pre>{result}</pre>} 
   
-    </>
+    // </>
 
-    )
+    );
   }
   
