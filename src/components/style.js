@@ -90,6 +90,10 @@ const TargetBox = styled.div`
   }
 `;
 
-
-export { SelectButton ,CaptureButton,HiddenFileInput,TargetImg,DetectionContainer,TargetBox};
+const ObjectDetectorContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+export { ObjectDetectorContainer,SelectButton ,CaptureButton,HiddenFileInput,TargetImg,DetectionContainer,TargetBox};
 

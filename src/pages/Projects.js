@@ -1,5 +1,5 @@
 import MotionHoc from "./MotionHoc";
-import OcrComponent from "../components/ocrDetector/ocrDetector1";
+import OcrComponent from "../components/ocrDetector/ocrDetectorWithoutPond";
 
 const ProjectsComponent = () => {
   return <h1>Projects</h1>;

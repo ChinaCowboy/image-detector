@@ -25,7 +25,6 @@ export default function OcrComponent() {
   const pond = useRef();
  
   const imageRef = useRef();
-  const [error, setError] = useState(null);
   const [result, setResult] = useState('');
   const [isRecognizing, setIsRecognizing] = useState(false);
 
@@ -35,21 +34,20 @@ export default function OcrComponent() {
   const recognizeOpt = {rotateAuto: true};
 
 
-  const detectObjectsOnImage = async (file) => {
-    const worker = await createWorker(['chi_sim','eng']);
+  const detectObjectsOnImage = async (file,pond) => {
+    const worker = await createWorker(['chi_sim', 'eng']);
     const imageElement = file.file
-    setError(null);
-      setResult('');
-      setIsRecognizing(true);
-      setPredictions(null);
-      (async () => {
-        const { data: {text,words} } = await worker.recognize(imageElement,undefined, {text: true, blocks: true, hocr: false, tsv: false, layoutBlocks: true});
-        setResult(text);
+    setResult('');
+    setIsRecognizing(true);
+    setPredictions(null);
+    (async () => {
+      const { data: { text, words } } = await worker.recognize(imageElement, undefined, { text: true, blocks: true, hocr: false, tsv: false, layoutBlocks: true });
+      setResult(text);
 
-        await showBlocksOnImg(imageElement,words); 
-        await worker.terminate();
-        setIsRecognizing(false);
-      })();
+      // await showBlocksOnImg(pond,words); 
+      await worker.terminate();
+      setIsRecognizing(false);
+    })();
 
   }
 
@@ -90,7 +88,7 @@ export default function OcrComponent() {
         <div className="col-md-4">
           <FilePond ref={pond} allowImageSizeMetadata={true}
             onaddfile={(err, file) => {
-              detectObjectsOnImage(file);
+              detectObjectsOnImage(file,FilePond);
             }}
             onremovefile={(err, file) => {
               setResult('');
@@ -99,7 +97,7 @@ export default function OcrComponent() {
           </div>
           {!isEmptyPredictions && predictions
           .filter((word) => {
-            return word.confidence > 90;
+            return word.confidence > 1;
           })
           .map((word,i) => (
             <TargetBox        
