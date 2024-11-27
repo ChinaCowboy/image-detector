@@ -1,6 +1,6 @@
 
 
-import { Headline,SelectButton,CaptureButton,HiddenFileInput,TargetImg,DetectionContainer } from '../style';
+import {TargetBox,SelectButton,CaptureButton,HiddenFileInput,TargetImg,DetectionContainer } from '../style';
 import React, { useRef, useState } from "react";
 import { createWorker,RecognizeOptions } from 'tesseract.js';
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -8,6 +8,8 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css';
 import 'filepond/dist/filepond.min.css';
 import Card from 'react-bootstrap/Card';
+
+
 registerPlugin(FilePondPluginImagePreview);
 const readImage = (file) => {
   return new Promise((rs, rj) => {
@@ -26,88 +28,93 @@ export default function OcrComponent() {
   const [error, setError] = useState(null);
   const [result, setResult] = useState('');
   const [isRecognizing, setIsRecognizing] = useState(false);
-  const [layoutBlock, SetLayoutBlock] = useState([]);
-  const [imageElementCopy, setimageElementCopy] = useState(null);
+
+  const [predictions, setPredictions] = useState([]);
+  const isEmptyPredictions = !predictions || predictions.length === 0;
 
   const recognizeOpt = {rotateAuto: true};
 
 
-  const detectObjectsOnImage = async (file,imageElement) => {
+  const detectObjectsOnImage = async (file) => {
     const worker = await createWorker(['chi_sim','eng']);
-      setError(null);
+    const imageElement = file.file
+    setError(null);
       setResult('');
       setIsRecognizing(true);
-
+      setPredictions(null);
       (async () => {
         const { data: {text,words} } = await worker.recognize(imageElement,undefined, {text: true, blocks: true, hocr: false, tsv: false, layoutBlocks: true});
         setResult(text);
 
-        console.log(text);
-        SetLayoutBlock(words);
-        console.log(words);
-
-        await showBlocksOnImg(file.file,words);
-       //  const data=await worker.recognize(imageElement, undefined, {text: true, blocks: false, hocr: false, tsv: false, layoutBlocks: true});
-
-
+        await showBlocksOnImg(imageElement,words); 
         await worker.terminate();
         setIsRecognizing(false);
       })();
 
   }
 
+  const normalizePredictions = (words, imgSize) => {
+    if (!words || !imgSize || !imageRef || !pond.current.file)  return words || [];
+    
+    return words.map((word) => {
+      const bbox  = word.bbox;
+      const oldX = bbox.x0;
+      const oldY = bbox.y0;
+      const oldWidth = bbox.x1-bbox.x0;
+      const oldHeight = bbox.y1-bbox.y0;
+
+      const imgWidth = pond.current.file.width;
+      const imgHeight = pond.current.file.height;
+
+      const x = (oldX * imgWidth) / imgSize.width;
+      const y = (oldY * imgHeight) / imgSize.height;
+      const width = (oldWidth * imgWidth) / imgSize.width;
+      const height = (oldHeight * imgHeight) / imgSize.height;
+
+      return { ...word, bbox: {x0 : x, y0 :y , x1:x+width, y1:y+height} };
+    });
+  };
   const showBlocksOnImg = async (imageElement,words) => {
-    // https://blog.logrocket.com/how-to-extract-text-from-an-image-using-javascript-8fe282fb0e71/
-    const imageElementCopy = document.createElement("img");
-    const imgData = await readImage(imageElement);
-    imageElementCopy.src = imgData;
-    imageElementCopy.onload = async () => {
-      const imgSize = {
-        width: imageElement.width,
-        height: imageElement.height,
-      };
-    }
-    setimageElementCopy(imageElementCopy);
-    const wordsElements = 
-          words.filter(({ confidence }) => {
-            return confidence > 10;
-          }).map((word) => {
-              const div = document.createElement('div');
-              const { x0, x1, y0, y1 } = word.bbox;
-              div.classList.add('word-element');
-              Object.assign(div.style, {
-                top: `${y0}px`,
-                left: `${x0}px`,
-                width: `${x1 - x0}px`,
-                height: `${y1 - y0}px`,
-                border: '1px solid black',
-                position: 'absolute',
-              });
-              return div;
-            });
-      
-      //imageElementCopy.appendChild(pond.current.imageElement);
-      imageElementCopy.append(...wordsElements);
-      console.log(...wordsElements);
+    const imgSize = {
+      width: imageElement.width,
+      height: imageElement.height,
+    };
+    const normalizedPredictions = normalizePredictions(words, imgSize);
+    setPredictions(normalizedPredictions);
   };
 
   return (
     <>      
     <h1>Extract text from the image</h1>
-    <div>
+        <div>
         <div className="col-md-4">
-          <FilePond ref={pond}
+          <FilePond ref={pond} allowImageSizeMetadata={true}
             onaddfile={(err, file) => {
-              detectObjectsOnImage(file,file.file);
-
+              detectObjectsOnImage(file);
             }}
             onremovefile={(err, file) => {
               setResult('');
             }}
           />
           </div>
+          {!isEmptyPredictions && predictions
+          .filter((word) => {
+            return word.confidence > 90;
+          })
+          .map((word,i) => (
+            <TargetBox        
+            key={i}  
+            x={word.bbox.x0}
+            width={word.bbox.x1-word.bbox.x0}
+            y={word.bbox.y0}
+            height={word.bbox.y1-word.bbox.y0}
+            score={word.confidence}
+            classType= {word.text}
+          />
+          ))}
+          </div>
 
-    </div>
+
     <div className="col-md-4">
         <Card style={{ width: '26rem' }} className="mb-2">
           <Card.Body>
@@ -119,7 +126,6 @@ export default function OcrComponent() {
         </Card>
     </div>
     <div>
-    <img src={imageElementCopy} ref={imageRef} />
     </div>
 
     </>
