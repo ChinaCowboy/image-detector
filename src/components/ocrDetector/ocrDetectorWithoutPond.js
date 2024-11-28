@@ -4,7 +4,7 @@ import {ObjectDetectorContainer,SelectButton,TargetBox,HiddenFileInput,TargetImg
 import React, { useRef, useState } from "react";
 import { createWorker } from 'tesseract.js';
 
-
+// https://stackoverflow.com/questions/46652041/read-circular-text-using-ocr
 
 export default function OcrComponent() {
   const fileInputRef = useRef();
