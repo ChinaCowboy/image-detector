@@ -1,10 +1,8 @@
+// https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+// https://blog.stackademic.com/react-tensorflow-ai-template-and-simple-project-6012071e2514
 import MotionHoc from "./MotionHoc";
-import OcrComponent from "../components/ocrDetector/ocrDetectorWithoutPond";
+import ImageModelPredict from "../components/ModelTraining/ImageModelPredict";
 
-const TeamComponent = () => {
-  return <h1>Team</h1>;
-};
-
-const Team = MotionHoc(OcrComponent);
+const Team = MotionHoc(ImageModelPredict);
 
 export default Team;

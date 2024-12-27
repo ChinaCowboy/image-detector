@@ -1,7 +1,10 @@
 import MotionHoc from "./MotionHoc";
 import styled from "styled-components";
-import {ObjectDetector} from '../components/objectDetector/objectDetector';
-import { ObjectDetection } from "face-api.js";
+import { ObjectDetector } from "../components/objectDetector/objectDetector";
+import CameraDetector from "../components/objectDetector/CameraDetector";
+import LinearTensorFlow from "../components/objectDetector/LinearTensorFlow";
+import { PolynormalRefression } from "../components/objectDetector/PolynormalRefression";
+import { Toxicity } from "../components/objectDetector/Toxicity";
 
 const AppContainer = styled.div`
   width: 100%;
@@ -16,16 +19,18 @@ const AppContainer = styled.div`
 
 const ObjectDetectionComponent = () => {
   return (
-    <>      
+    <>
       <h1>Detect the object from the image (still have bug )</h1>
       <div>
-      <AppContainer/>
-        <ObjectDetector />
+        <AppContainer />
+        {/* <Toxicity /> */}
+        <LinearTensorFlow />
+        {/* <CameraDetector /> */}
       </div>
     </>
-    );
-  }
+  );
+};
 
-  const ObjectDetectionPage = MotionHoc(ObjectDetectionComponent);
+const ObjectDetectionPage = MotionHoc(ObjectDetectionComponent);
 
-  export default ObjectDetectionPage;
+export default ObjectDetectionPage;

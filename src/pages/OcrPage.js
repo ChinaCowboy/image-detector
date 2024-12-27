@@ -1,6 +1,6 @@
 import MotionHoc from "./MotionHoc";
-import OcrComponent from "../components/ocrDetector/ocrDetector";
+import ocrDetectorWrapper from "../components/ocrDetector/ocrDetectorWrapper";
 
-const OcrPage = MotionHoc(OcrComponent);
+const OcrPage = MotionHoc(ocrDetectorWrapper);
 
 export default OcrPage;

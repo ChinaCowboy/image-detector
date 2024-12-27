@@ -1,10 +1,9 @@
-
 import styled from "styled-components";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "@tensorflow/tfjs-backend-cpu";
 //import "@tensorflow/tfjs-backend-webgl";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
-
+import * as tf from "@tensorflow/tfjs";
 const ObjectDetectorContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -70,19 +69,40 @@ const TargetImg = styled.img`
   height: 100%;
 `;
 
-
-export function ObjectDetector(props) 
-{
-
+export function ObjectDetector(props) {
   const fileInputRef = useRef();
   const imageRef = useRef();
   const [isLoading, setLoading] = useState(false);
   const [imgData, setImgData] = useState(null);
   const [predictions, setPredictions] = useState([]);
+  const [model, setModel] = useState(null);
   const openFilePicker = () => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
-  
+
+  useEffect(() => {
+    const loadModel = async () => {
+      const LOCAL_MODEL_PATH =
+        process.env.PUBLIC_URL +
+        "/models/tiny_face_detector_model-weights_manifest.json";
+      const HOSTED_MODEL_PATH =
+        "https://storage.googleapis.com/tfjs-examples/simple-object-detection/dist/object_detection_model/model.json";
+
+      try {
+        let loadmodel = null;
+        loadmodel = await tf.loadLayersModel(HOSTED_MODEL_PATH);
+        loadmodel.summary();
+        setModel(loadmodel);
+      } catch (err) {
+        console.log("load model error :", err);
+      }
+    };
+    if (model === null) {
+      loadModel();
+      console.log("model loaded");
+    }
+  }, [model]); //watch the values for this and execute when changes
+
   const isEmptyPredictions = !predictions || predictions.length === 0;
 
   const normalizePredictions = (predictions, imgSize) => {
@@ -107,8 +127,18 @@ export function ObjectDetector(props)
   };
 
   const detectObjectsOnImage = async (imageElement, imgSize) => {
-    const model = await cocoSsd.load({});
-    const predictions = await model.detect(imageElement, 6);
+    //const model = await cocoSsd.load({});
+    //const predictions = await model.detect(imageElement, 6);
+    const imgTensors = [];
+
+    // const tensorImage= tf.browser.fromPixels(imageElement.)
+    // imgTensors.push(imageElement.);
+    const imgs = tf.stack(imgTensors);
+
+    const predictions = await model.predict(imgs).data();
+
+    console.log("Predictions: ", predictions);
+
     const normalizedPredictions = normalizePredictions(predictions, imgSize);
     setPredictions(normalizedPredictions);
     console.log("Predictions: ", predictions);
@@ -121,8 +151,6 @@ export function ObjectDetector(props)
     //     console.log("Predictions: ", predictions);
     //       });
     // });
-
-
   };
 
   const readImage = (file) => {
@@ -133,7 +161,7 @@ export function ObjectDetector(props)
       fileReader.readAsDataURL(file);
     });
   };
-  
+
   const onSelectImage = async (e) => {
     setLoading(true);
     const file = e.target.files[0];
@@ -147,16 +175,16 @@ export function ObjectDetector(props)
         height: imageElement.height,
       };
       await detectObjectsOnImage(imageElement, imgSize);
- 
+
       setLoading(false);
     };
   };
-  
-return (
-  <ObjectDetectorContainer>
+
+  return (
+    <ObjectDetectorContainer>
       <DetectorContainer>
-      {imgData && <TargetImg src={imgData} ref={imageRef} />}
-      {!isEmptyPredictions &&
+        {imgData && <TargetImg src={imgData} ref={imageRef} />}
+        {!isEmptyPredictions &&
           predictions.map((prediction, idx) => (
             <TargetBox
               key={idx}
@@ -178,6 +206,6 @@ return (
       <SelectButton onClick={openFilePicker}>
         {isLoading ? "Recognizing..." : "Select Image"}
       </SelectButton>
-  </ObjectDetectorContainer>
-);
+    </ObjectDetectorContainer>
+  );
 }
