@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { useEffect, useRef, useState } from "react";
-import * as faceapi from "face-api.js";
+import * as faceapi from "@vladmandic/face-api";
 import "./FaceRecognition.css";
 
 const FaceRecognition = () => {
@@ -26,6 +26,7 @@ const FaceRecognition = () => {
       await faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL);
       await faceapi.nets.faceExpressionNet.loadFromUri(MODEL_URL);
       setModelsLoaded(true);
+      console.log("Models loaded");
     };
 
     loadModels();

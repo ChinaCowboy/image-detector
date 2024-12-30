@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import * as tf from "@tensorflow/tfjs";
 import * as tmImage from "@teachablemachine/image";
-
+import "./ImageModelPredict.css";
 function ImageModelPredict() {
   const [model, setModel] = useState(null);
   const [maxPredictions, setMaxPredictions] = useState(0);
@@ -44,17 +44,17 @@ function ImageModelPredict() {
   return (
     <div>
       <div>Teachable Machine Image Model</div>
-      <button type="button" onClick={loop}>
+      <button type="button" onClick={loop} className="button">
         Start
       </button>
       <Webcam
         audio={false}
         ref={webcamRef}
-        width={200}
-        height={200}
+        width={400}
+        height={800}
         screenshotFormat="image/jpeg"
       />
-      <div id="label-container">
+      <div id="label-container" className="label-container">
         {Array.from(Array(maxPredictions).keys()).map((index) => (
           <div key={index}></div>
         ))}
