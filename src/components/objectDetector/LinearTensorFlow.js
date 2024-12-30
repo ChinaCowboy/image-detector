@@ -86,7 +86,7 @@ export default function LinearTensorFlow() {
     for (let index = 0; index < x_vals.length; index++) {
       let px = p.map(x_vals[index], 0, 1, 0, p.width);
       let py = p.map(y_vals[index], 0, 1, p.height, 0);
-      p.strokeWeight(2);
+      p.strokeWeight(6);
       p.point(px, py);
     }
     const xs = [0, 1];

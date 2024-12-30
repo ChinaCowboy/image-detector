@@ -33,6 +33,8 @@ function ImageModelPredict() {
         const classPrediction =
           prediction[i].className + ": " + prediction[i].probability.toFixed(2);
         labelContainer.childNodes[i].innerHTML = classPrediction;
+        labelContainer.childNodes[i].style.width =
+          prediction[i].probability.toFixed(2) * 100 + "%";
       }
     }
   }
@@ -54,10 +56,13 @@ function ImageModelPredict() {
         height={800}
         screenshotFormat="image/jpeg"
       />
-      <div id="label-container" className="label-container">
-        {Array.from(Array(maxPredictions).keys()).map((index) => (
-          <div key={index}></div>
-        ))}
+      <div class="container">
+        <h2>Output:</h2>
+        <div id="label-container" class="bar-container">
+          {Array.from(Array(maxPredictions).keys()).map((index) => (
+            <div key={index} class="bar usual"></div>
+          ))}
+        </div>
       </div>
     </div>
   );
