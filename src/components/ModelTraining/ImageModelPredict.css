@@ -1,15 +1,36 @@
+.container {
+  max-width: 100%;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #fff;
+  text-align: "center";
+}
+
+/* Styling the video element to make it responsive */
+.video-element {
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
 .button {
-  background-color: #4caf50; /* Green */
-  border: none;
+  background-color: #008000;
   color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 25px;
   cursor: pointer;
-  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+  border-radius: 10px;
+  cursor: "pointer";
 }
 
 .button:hover {
@@ -24,15 +45,6 @@
   max-width: 100%;
 }
 
-.container {
-  max-width: 400px;
-  margin: auto;
-  border: 1px solid #ddd;
-  padding: 20px;
-  border-radius: 10px;
-  background-color: #fff;
-}
-
 .bar-container {
   margin: 15px 0;
 }
@@ -43,10 +55,40 @@
   transition: width 1s ease;
 }
 
-.happy {
-  background-color: #f8d9b3;
+.usual0 {
+  background-color: hsl(115, 85%, 50%);
 }
 
-.usual {
+.usual1 {
   background-color: #d9534f;
+}
+
+.title_container {
+  top: 10px;
+  left: 10px;
+  width: 500px;
+  height: 200px;
+  color: #fff;
+  background-color: #437199;
+  position: relative;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.title {
+  margin: 0px 0px;
+  height: 40px;
+  background-position: center;
+  background-repeat: repeat-x;
+}
+
+.title_sub_text {
+  padding-top: 10px;
+  font-weight: bold;
+  overflow: hidden;
+  position: relative;
+}
+h1 {
+  top: 10px;
+  /* position: absolute; */
 }

@@ -8,6 +8,7 @@ function ImageModelPredict() {
   const [maxPredictions, setMaxPredictions] = useState(0);
   const URL = "https://teachablemachine.withgoogle.com/models/VEYE-ccHc/";
   const webcamRef = React.useRef(null);
+  const [predictions, setPredictions] = useState(Array(maxPredictions).fill(0));
 
   useEffect(() => {
     init();
@@ -26,41 +27,49 @@ function ImageModelPredict() {
     setMaxPredictions(tmModel.getTotalClasses());
   }
 
-  async function predict(webcamRef, labelContainer) {
-    if (model && webcamRef && webcamRef.current && labelContainer) {
-      const prediction = await model.predict(webcamRef.current.video);
-      for (let i = 0; i < maxPredictions; i++) {
-        const classPrediction =
-          prediction[i].className + ": " + prediction[i].probability.toFixed(2);
-        labelContainer.childNodes[i].innerHTML = classPrediction;
-        labelContainer.childNodes[i].style.width =
-          prediction[i].probability.toFixed(2) * 100 + "%";
-      }
+  async function predict(webcamRef) {
+    if (model && webcamRef && webcamRef.current) {
+      const predictions = await model.predict(webcamRef.current.video);
+      setPredictions(predictions);
     }
   }
   const loop = async () => {
-    await predict(webcamRef, document.getElementById("label-container"));
+    await predict(webcamRef);
     window.requestAnimationFrame(loop);
   };
 
   return (
-    <div>
-      <div>Teachable Machine Image Model</div>
-      <button type="button" onClick={loop} className="button">
-        Start
-      </button>
-      <Webcam
-        audio={false}
-        ref={webcamRef}
-        width={400}
-        height={800}
-        screenshotFormat="image/jpeg"
-      />
-      <div class="container">
+    <div class="container">
+      <div>
+        <h1>Teachable Machine Image Model</h1>
+      </div>
+
+      <div style={{ textAlign: "center", padding: "10px" }}>
+        <Webcam
+          audio={false}
+          ref={webcamRef}
+          width={400}
+          height={800}
+          screenshotFormat="image/jpeg"
+          className="video-element video"
+        />
+      </div>
+      <div style={{ textAlign: "center", padding: "10px" }}>
+        <button type="button" onClick={loop} className="button">
+          Start
+        </button>
+      </div>
+      <div className="label-container">
         <h2>Output:</h2>
-        <div id="label-container" class="bar-container">
-          {Array.from(Array(maxPredictions).keys()).map((index) => (
-            <div key={index} class="bar usual"></div>
+        <div id="bar-container" className="bar-container">
+          {predictions.map((pre, index) => (
+            <div
+              key={index}
+              className={`bar usual${index} title`}
+              style={{ width: `${pre.probability * 100}%` }}
+            >
+              {pre.className}
+            </div>
           ))}
         </div>
       </div>
