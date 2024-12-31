@@ -48,72 +48,16 @@ const FaceRecognition = () => {
   //   startVideo();
   // }, [videoRef]);
   // helper function to draw detected faces
-  function faces(name, title, id, data) {
-    // create canvas to draw on
-    const img = document.getElementById(id);
-    if (!img) return;
-    const canvas = document.createElement("canvas");
-    canvas.style.position = "absolute";
-    canvas.style.left = `${img.offsetLeft}px`;
-    canvas.style.top = `${img.offsetTop}px`;
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext("2d", { willReadFrequently: true });
-    if (!ctx) return;
-    // draw title
-    ctx.font = "1rem sans-serif";
-    ctx.fillStyle = "black";
-    ctx.fillText(name, 2, 15);
-    ctx.fillText(title, 2, 35);
-    for (const person of data) {
-      // draw box around each face
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = "deepskyblue";
-      ctx.fillStyle = "deepskyblue";
-      ctx.globalAlpha = 0.4;
-      ctx.beginPath();
-      ctx.rect(
-        person.detection.box.x,
-        person.detection.box.y,
-        person.detection.box.width,
-        person.detection.box.height
-      );
-      ctx.stroke();
-      // draw text labels
-      ctx.globalAlpha = 1;
-      ctx.fillText(
-        `${Math.round(100 * person.genderProbability)}% ${person.gender}`,
-        person.detection.box.x,
-        person.detection.box.y - 18
-      );
-      ctx.fillText(
-        `${Math.round(person.age)} years`,
-        person.detection.box.x,
-        person.detection.box.y - 2
-      );
-      // draw face points for each face
-      ctx.fillStyle = "lightblue";
-      ctx.globalAlpha = 0.5;
-      const pointSize = 2;
-      for (const pt of person.landmarks.positions) {
-        ctx.beginPath();
-        ctx.arc(pt.x, pt.y, pointSize, 0, 2 * Math.PI);
-        ctx.fill();
-      }
-    }
-    // add canvas to document
-    document.body.appendChild(canvas);
-  }
 
-  // helper function to draw processed image and its results
-  function print(title, img, data) {
-    console.log("Results:", title, img, data); // eslint-disable-line no-console
-    const el = new Image();
-    el.id = Math.floor(Math.random() * 100000).toString();
-    el.src = img;
-    el.width = videoWidth;
-    el.onload = () => faces(img, title, el.id, data);
-    document.body.appendChild(el);
+  function drawAgeGender(canvasArg, resizedDetections, minConfidence = 0.1) {
+    const anchor = { x: 0, y: 0 };
+    const drawTextField1 = new faceapi.draw.DrawTextField(
+      resizedDetections.map(
+        (expr) => `${expr.gender} (${Math.round(expr.age)})`
+      ),
+      anchor
+    );
+    drawTextField1.draw(canvasArg);
   }
 
   const startVideo = () => {
@@ -161,7 +105,7 @@ const FaceRecognition = () => {
           .withAgeAndGender();
 
         setDetections(detections);
-
+        // console.log("Detections:", detections);
         const resizedDetections = faceapi.resizeResults(
           detections,
           displaySize
@@ -178,7 +122,8 @@ const FaceRecognition = () => {
             canvasRef.current,
             resizedDetections
           );
-          print("TinyFace:", canvasRef.current, resizedDetections);
+          drawAgeGender(canvasRef.current, resizedDetections);
+          // print("TinyFace:", canvasRef.current, resizedDetections);
         }
       }
     }, 100);

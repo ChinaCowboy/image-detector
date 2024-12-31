@@ -101,7 +101,7 @@ function ImageModelPredict() {
       <div className="container">
         <h2>Add Image Samples:</h2>
         <button type="button" onClick={CameraOrImageClick} className="button">
-          Camera or Image
+          {isCamera ? "Image" : "Camera"}
         </button>
       </div>
 
@@ -149,7 +149,7 @@ function ImageModelPredict() {
                 className={`bar usual${index} title`}
                 style={{ width: `${pre.probability * 100}%` }}
               >
-                {pre.className}
+                {pre.className} : {pre.probability.toFixed(2)}
               </div>
             ))}
         </div>
