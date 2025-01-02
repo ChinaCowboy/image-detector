@@ -1,22 +1,24 @@
 .container {
   max-width: 100%;
-  margin: 10px 0;
+  margin: 10px 10px; /* Increased top and bottom margin */
   border: 1px solid #ddd;
-  padding: 10px;
+  padding: 20px 10px; /* Increased top and bottom padding */
   border-radius: 10px;
   background-color: #fff;
-  text-align: "center";
+  text-align: center;
   height: auto;
+  max-height: 800px;
+  margin-bottom: 10px;
 }
 
 /* Styling the video element to make it responsive */
 .video-element {
   width: 100%;
-  max-width: 720px;
+  max-width: 300px;
+  max-height: 360px;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin-bottom: 20px;
 }
 .radio-container {
   align-items: center;
@@ -40,7 +42,7 @@
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
-  font-size: 25px;
+  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -57,12 +59,12 @@
   flex-direction: column;
   align-items: left;
   justify-content: center;
-  padding: 20px;
+  padding: 10px;
   max-width: 100%;
 }
 
 .bar-container {
-  margin: 15px 20px;
+  margin: 10∂px 10px;
   display: flex;
   flex-direction: column;
   align-items: left; /* Center align the bars horizontally */
@@ -70,12 +72,12 @@
 
 .bar {
   display: flex;
-  height: 25px;
+  height: 20px;
   border-radius: 5px;
   transition: width 1s ease;
   max-width: 60%;
   align-items: center;
-  align-self: right;
+  margin-bottom: 5px; /* Reduced margin to make space between bars more dense */
 }
 
 .usual1 {
@@ -89,13 +91,13 @@
 .title_container {
   top: 10px;
   left: 10px;
-  width: 500px;
-  height: 200px;
+  width: 400px;
+  height: 160px;
   color: #fff;
   background-color: #437199;
   position: relative;
   text-align: center;
-  padding-top: 20px;
+  padding-top: 10px;
 }
 
 .title {
@@ -114,4 +116,9 @@
 h1 {
   top: 10px;
   /* position: absolute; */
+}
+h2 {
+  top: 10px;
+  font-size: medium;
+  position: absolute;
 }

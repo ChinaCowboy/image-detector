@@ -129,21 +129,19 @@ function ImageModelPredict() {
 
       {isCamera && (
         <ObjectDetectorContainer>
-          <div style={{ textAlign: "center", padding: "10px" }}>
+          <div style={{ textAlign: "center" }}>
             <Webcam
               audio={false}
               ref={webcamRef}
-              width={400}
-              height={800}
+              width={180}
+              height={300}
               screenshotFormat="image/jpeg"
-              className="video-element video"
+              className="video-element"
             />
           </div>
-          <div style={{ textAlign: "center", padding: "10px" }}>
-            <button type="button" onClick={loop} className="button">
-              Start
-            </button>
-          </div>
+          <SelectButton type="button" onClick={loop} className="button">
+            Start
+          </SelectButton>
         </ObjectDetectorContainer>
       )}
       {!isCamera && (
