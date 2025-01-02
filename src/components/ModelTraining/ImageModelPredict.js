@@ -94,15 +94,34 @@ function ImageModelPredict() {
   };
 
   return (
-    <div className="container">
+    <div className="container" style={{ textAlign: "center" }}>
       <div>
         <h1>Teachable Machine Image Model</h1>
       </div>
-      <div className="container">
+      <div className="radio-container">
         <h2>Add Image Samples:</h2>
-        <button type="button" onClick={CameraOrImageClick} className="button">
-          {isCamera ? "Image" : "Camera"}
-        </button>
+        <label className="radio-label">
+          <input
+            type="radio"
+            name="mode"
+            value="camera"
+            checked={isCamera}
+            onChange={CameraOrImageClick}
+            className="radio-input"
+          />
+          Camera
+        </label>
+        <label className="radio-label">
+          <input
+            type="radio"
+            name="mode"
+            value="image"
+            checked={!isCamera}
+            onChange={CameraOrImageClick}
+            className="radio-input"
+          />
+          Image
+        </label>
       </div>
 
       {isCamera && (
@@ -146,10 +165,24 @@ function ImageModelPredict() {
             predictions.map((pre, index) => (
               <div
                 key={index}
-                className={`bar usual${index} title`}
-                style={{ width: `${pre.probability * 100}%` }}
+                style={{ display: "flex", alignItems: "center" }}
               >
-                {pre.className} : {pre.probability.toFixed(2)}
+                <span
+                  className="title"
+                  style={{
+                    marginRight: "10px",
+                    marginTop: "20px",
+                    width: "40px",
+                  }}
+                >
+                  {pre.className}
+                </span>
+                <div
+                  className={`bar usual${index} title`}
+                  style={{ width: `${pre.probability * 100}%` }}
+                >
+                  {(pre.probability * 100).toFixed(0) + "%"}
+                </div>
               </div>
             ))}
         </div>
