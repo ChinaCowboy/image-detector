@@ -16,7 +16,9 @@ function ImageModelPredict() {
   const [maxPredictions, setMaxPredictions] = useState(0);
   const [isCamera, setIsCamera] = useState(false);
 
-  const URL = "https://teachablemachine.withgoogle.com/models/VEYE-ccHc/";
+  //  const URL = "https://teachablemachine.withgoogle.com/models/VEYE-ccHc/";
+
+  const URL = process.env.PUBLIC_URL + "/models/stamp/";
   const webcamRef = React.useRef(null);
   const [predictions, setPredictions] = useState(Array(maxPredictions).fill(0));
   const fileInputRef = useRef();
@@ -60,13 +62,14 @@ function ImageModelPredict() {
   };
 
   async function init() {
-    // const modelURL = URL + "model.json";
-    // const metadataURL = URL + "metadata.json";
-    const modelURL =
-      "https://storage.googleapis.com/tm-model/VEYE-ccHc/model.json";
+    const modelURL = URL + "stamp-model.json";
+    const metadataURL = URL + "stamp-metadata.json";
+    // const modelURL =
+    //   "https://storage.googleapis.com/tm-model/VEYE-ccHc/model.json";
 
-    const metadataURL =
-      "https://storage.googleapis.com/tm-model/VEYE-ccHc/metadata.json";
+    // const metadataURL =
+    //   "https://storage.googleapis.com/tm-model/VEYE-ccHc/metadata.json";
+
     const tmModel = await tmImage.load(modelURL, metadataURL);
     setModel(tmModel);
     setMaxPredictions(tmModel.getTotalClasses());
@@ -172,7 +175,7 @@ function ImageModelPredict() {
                   style={{
                     marginRight: "10px",
                     marginTop: "20px",
-                    width: "40px",
+                    width: "160px",
                   }}
                 >
                   {pre.className}

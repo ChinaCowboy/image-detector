@@ -8,7 +8,14 @@ import Documents from "../../assets/draft.svg";
 import PowerOff from "../../assets/power-off-solid.svg";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
-import { AiTwotoneCamera,AiFillHome,AiOutlineTeam,AiFillContacts, AiFillFileUnknown } from "react-icons/ai";
+import {
+  AiTwotoneCamera,
+  AiFillHome,
+  AiOutlineTeam,
+  AiFillContacts,
+  AiFillEye,
+  AiFillFileUnknown,
+} from "react-icons/ai";
 
 const Container = styled.div`
   position: fixed;
@@ -217,7 +224,7 @@ const Logout = styled.button`
   }
 `;
 
-const iconstyle = { color: "white", fontSize: "1.5em" }
+const iconstyle = { color: "white", fontSize: "1.5em" };
 
 const Sidebar = () => {
   const [click, setClick] = useState(false);
@@ -250,7 +257,7 @@ const Sidebar = () => {
             activeClassName="active"
             to="/team"
           >
-            <AiOutlineTeam style={iconstyle}/>
+            <AiFillEye style={iconstyle} />
             <Text clicked={click}>Team</Text>
           </Item>
           <Item
@@ -258,7 +265,7 @@ const Sidebar = () => {
             activeClassName="active"
             to="/imagedetector"
           >
-            <AiTwotoneCamera alt="ImageDetector" style={iconstyle}/>
+            <AiTwotoneCamera alt="ImageDetector" style={iconstyle} />
             <Text clicked={click}>ImageDetector</Text>
           </Item>
           <Item
