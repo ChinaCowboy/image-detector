@@ -97,12 +97,11 @@ function ImageModelPredict() {
   };
 
   return (
-    <div className="container" style={{ textAlign: "center" }}>
+    <div className="container">
       <div>
-        <h1>Teachable Machine Image Model</h1>
+        <h1>Teachable Image Model</h1>
       </div>
       <div className="radio-container">
-        <h2>Add Image Samples:</h2>
         <label className="radio-label">
           <input
             type="radio"
@@ -160,7 +159,6 @@ function ImageModelPredict() {
         </ObjectDetectorContainer>
       )}
       <div className="label-container">
-        <h2>Output:</h2>
         <div id="bar-container" className="bar-container">
           {!isEmptyPredictions &&
             predictions.map((pre, index) => (
@@ -172,7 +170,7 @@ function ImageModelPredict() {
                   className="title"
                   style={{
                     marginRight: "10px",
-                    marginTop: "20px",
+                    marginTop: "10px",
                     width: "160px",
                   }}
                 >

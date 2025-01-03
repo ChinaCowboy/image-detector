@@ -27,7 +27,7 @@ const SelectButton = styled.button`
   /* border: 2px solid transparent; */
   background-color: #008000;
   color: #fff;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
   outline: none;
   //margin-top: 2em;
