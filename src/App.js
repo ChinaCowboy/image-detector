@@ -1,4 +1,3 @@
-
 import { Route, Routes, useLocation } from "react-router";
 
 import Sidebar from "./components/Sidebar";
@@ -7,11 +6,9 @@ import Home from "./pages/Home";
 import Team from "./pages/Team";
 import ImageDetectorPage from "./pages/ImageDetectorPage";
 import OrcPage from "./pages/OcrPage";
-import ObjectDetectionPage  from "./pages/ObjectDetectionPage";
+import ObjectDetectionPage from "./pages/ObjectDetectionPage";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
-
-
 
 const Pages = styled.div`
   width: 100vw;
@@ -31,15 +28,15 @@ const Pages = styled.div`
 function App() {
   const location = useLocation();
   return (
-      <>
-      <Sidebar/>
+    <>
+      <Sidebar />
       <Pages>
         <AnimatePresence mode="wait">
           <Routes location={location} key={location.pathname}>
-            <Route exact path="/image-detector" element={<Home />} />
+            <Route exact path="/" element={<Home />} />
             <Route path="/team" element={<Team />} />
             <Route path="/imagedetector" element={<ImageDetectorPage />} />
-            <Route path="/ocr" element={<OrcPage/>} />
+            <Route path="/ocr" element={<OrcPage />} />
             <Route path="/objectdetection" element={<ObjectDetectionPage />} />
           </Routes>
         </AnimatePresence>
