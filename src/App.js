@@ -9,6 +9,7 @@ import OrcPage from "./pages/OcrPage";
 import ObjectDetectionPage from "./pages/ObjectDetectionPage";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
+import ImageSegmentationPage from "./pages/ImageSegmentationPage";
 
 const Pages = styled.div`
   width: 100vw;
@@ -38,6 +39,10 @@ function App() {
             <Route path="/imagedetector" element={<ImageDetectorPage />} />
             <Route path="/ocr" element={<OrcPage />} />
             <Route path="/objectdetection" element={<ObjectDetectionPage />} />
+            <Route
+              path="/imagesegmentation"
+              element={<ImageSegmentationPage />}
+            />
           </Routes>
         </AnimatePresence>
       </Pages>

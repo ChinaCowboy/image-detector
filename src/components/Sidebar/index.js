@@ -15,6 +15,7 @@ import {
   AiFillContacts,
   AiFillEye,
   AiFillFileUnknown,
+  AiOutlineFund,
 } from "react-icons/ai";
 
 const Container = styled.div`
@@ -283,6 +284,14 @@ const Sidebar = () => {
           >
             <AiFillContacts alt="Object Detection" style={iconstyle} />
             <Text clicked={click}>Object Detection</Text>
+          </Item>
+          <Item
+            onClick={() => setClick(false)}
+            activeClassName="active"
+            to="/imageSegmentation"
+          >
+            <AiOutlineFund alt="Image Segmentation" style={iconstyle} />
+            <Text clicked={click}>Image Segmentation</Text>
           </Item>
         </SlickBar>
 
