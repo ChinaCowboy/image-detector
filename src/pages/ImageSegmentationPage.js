@@ -20,9 +20,7 @@ const ImageSegmentationComponent = () => {
   return (
     <>
       <h1>Image Segmentation</h1>
-      <ErrorBoundary>
-        <ImageSegmentation />
-      </ErrorBoundary>
+      <ImageSegmentation />
     </>
   );
 };

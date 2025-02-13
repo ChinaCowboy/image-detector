@@ -1,10 +1,11 @@
 import React, { useState, useRef } from "react";
 import {
-  ObjectDetectorContainer,
+  StyledSelect,
   SelectButton,
   HiddenFileInput,
   TargetImg,
   DetectionContainer,
+  LoadingOverlay,
 } from "../style"; // Ensure these styled components are defined
 import * as deeplab from "@tensorflow-models/deeplab";
 
@@ -12,6 +13,12 @@ export const ImageSegmentation = () => {
   const [model, setModel] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [modelNameSelect, setModelNameSelect] = useState("pascal"); // Default model
+  const [showOptions, setShowOptions] = useState(false);
+
+  const [objectColors, setObjectColors] = useState({});
+
+  const models = ["pascal", "cityscapes", "ade20k"];
+
   const fileInputRef = useRef();
   const imageRef = useRef();
   const [imgData, setImgData] = useState(null);
@@ -51,8 +58,9 @@ export const ImageSegmentation = () => {
   };
 
   const renderPrediction = (segmentation, imageElement) => {
-    const { segmentationMap, width, height } = segmentation;
+    const { legend, segmentationMap, width, height } = segmentation;
 
+    displayLegends(legend);
     // Create a canvas element to overlay on the selected image
     const canvas = document.createElement("canvas");
     canvas.width = width;
@@ -61,52 +69,11 @@ export const ImageSegmentation = () => {
     // Draw segmentation map on the canvas
     const ctx = canvas.getContext("2d");
 
-    // Set colors for different segments (assuming a simple color map)
-    // Generate dynamic colors for unique classes
-    const generateColor = (classIndex) => {
-      const hue = (classIndex * 360) / 21; // Adjust for your number of classes (21 is just an example)
-      return `hsl(${hue}, 100%, 50%, 0.8)`; // 50% lightness and 50% transparency
-    };
-    // HSL to RGB conversion function
-    const hslToRgb = (h, s, l) => {
-      let r, g, b;
-      if (s === 0) {
-        // Achromatic
-        r = g = b = l; // achromatic
-      } else {
-        const hue2rgb = (p, q, t) => {
-          if (t < 0) t += 1;
-          if (t > 1) t -= 1;
-          if (t < 1 / 6) return p + (q - p) * 6 * t;
-          if (t < 1 / 2) return q;
-          if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-          return p;
-        };
-        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        const p = 2 * l - q;
-        r = hue2rgb(p, q, h / 360 + 1 / 3);
-        g = hue2rgb(p, q, h / 360);
-        b = hue2rgb(p, q, h / 360 - 1 / 3);
-      }
-      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
-    };
     // Draw each pixel's color based on the segmentation map
-    const imageData = ctx.createImageData(width, height);
-    for (let i = 0; i < segmentationMap.length; i++) {
-      const classIndex = segmentationMap[i];
-      const color = generateColor(classIndex);
-      const rgba = color.match(/\d+/g); // Extract HSL values and convert to RGB
-      const [h, s, l] = rgba.map(Number);
-
-      // Convert HSL to RGB
-      const [r, g, b] = hslToRgb(h, s, l);
-
-      imageData.data[i * 4 + 0] = r; // R
-      imageData.data[i * 4 + 1] = g; // G
-      imageData.data[i * 4 + 2] = b; // B
-      imageData.data[i * 4 + 3] = 128; // A (50% opacity)
+    console.log("segmentationMap", segmentationMap);
+    for (let i = 0; i < segmentationMap.length; i += 4) {
+      segmentationMap[i + 3] = 128;
     }
-
     const segmentationMapData = new ImageData(segmentationMap, width, height);
     ctx.putImageData(segmentationMapData, 0, 0);
 
@@ -114,6 +81,54 @@ export const ImageSegmentation = () => {
     setCanvasRef(canvas.toDataURL());
     // Revoke the object URL after using it
     URL.revokeObjectURL(canvas);
+  };
+
+  const displayLegends = (legendObj) => {
+    const legendsDiv = document.getElementById("legends");
+    const legendLabel = document.getElementById("legendLabel");
+
+    // Clear previous legends
+    legendsDiv.innerHTML = "";
+
+    // Populate legends
+    Object.keys(legendObj).forEach((legend) => {
+      const [red, green, blue] = legendObj[legend];
+      const span = document.createElement("span");
+      span.innerHTML = legend;
+      span.style.backgroundColor = `rgb(${red}, ${green}, ${blue})`;
+      span.style.padding = "10px";
+      span.style.marginRight = "10px";
+      span.style.color = "#ffffff";
+      span.onclick = storeObjectColor; // Ensure storeObjectColor is defined
+
+      legendsDiv.appendChild(span);
+    });
+
+    // Make the legend label and the legends visible
+    legendLabel.style.visibility = "visible";
+    legendsDiv.style.visibility = "visible";
+  };
+
+  const storeObjectColor = (e) => {
+    const target = e.target || e.srcElement;
+    const objectName = target.textContent;
+    const objectColor = window.getComputedStyle(target).backgroundColor;
+
+    // Convert the obtained color to a number array
+    const colorArray = objectColor
+      .replace("rgb(", "")
+      .replace(")", "")
+      .split(",")
+      .map(Number);
+
+    // Update the objectColors state
+    setObjectColors((prevColors) => ({
+      ...prevColors,
+      [objectName]: colorArray,
+    }));
+
+    // Highlight the selected legend
+    target.style.border = "5px solid green";
   };
 
   const onSelectImage = async (e) => {
@@ -141,8 +156,17 @@ export const ImageSegmentation = () => {
   // style={{ position: "relative", display: "inline-block" }}
   return (
     <div>
-      <DetectionContainer>
-        {imgData && <TargetImg src={imgData} alt="Selected" ref={imageRef} />}
+      <DetectionContainer
+        style={{ position: "relative", display: "inline-block" }}
+      >
+        {imgData && (
+          <TargetImg
+            src={imgData}
+            alt="Selected"
+            ref={imageRef}
+            style={{ width: "100%", height: "auto" }}
+          />
+        )}
         {canvasRef && (
           <img
             src={canvasRef}
@@ -151,27 +175,50 @@ export const ImageSegmentation = () => {
               position: "absolute",
               top: 0,
               left: 0,
-              pointerEvents: "none", // This allows clicks to go through the canvas
+              width: "100%", // Match the original image size
+              height: "auto", // Maintain aspect ratio
+              pointerEvents: "none",
             }}
           />
         )}
+        {/* Loading Overlay */}
+        <LoadingOverlay visible={isLoading}>
+          Loading Model...{modelNameSelect}
+        </LoadingOverlay>
+        <label id="legendLabel" style={{ visibility: "hidden" }}>
+          Legend
+        </label>
+        <div id="legends" style={{ visibility: "hidden" }}></div>
       </DetectionContainer>
       <div>
-        <select
-          name="modelNameSelect"
-          id="modelNameSelect"
-          value={modelNameSelect}
-          onChange={(e) => setModelNameSelect(e.target.value)}
-        >
-          <option value="pascal">Pascal</option>
-          <option value="cityscapes">City Scapes</option>
-          <option value="ade20k">ADE20K</option>
-        </select>
-        <button id="loadModel" onClick={() => loadModel(modelNameSelect)}>
-          {isLoading
-            ? `Loading...  ${modelNameSelect}`
-            : `(${modelNameSelect}) Loaded Model`}
-        </button>
+        {/* Custom Dropdown for Model Selection */}
+        <StyledSelect>
+          <div
+            className="custom-select"
+            onClick={() => setShowOptions(!showOptions)}
+          >
+            {modelNameSelect}
+          </div>
+          {showOptions && (
+            <div className="dropdown-options">
+              {models.map((model) => (
+                <div
+                  key={model}
+                  className="option"
+                  onClick={() => {
+                    setModelNameSelect(model);
+                    setShowOptions(false);
+                    loadModel(model); // Load the model on selection
+                  }}
+                >
+                  {model.charAt(0).toUpperCase() + model.slice(1)}{" "}
+                  {/* Capitalize the first letter */}
+                </div>
+              ))}
+            </div>
+          )}
+        </StyledSelect>
+
         <HiddenFileInput
           type="file"
           ref={fileInputRef}

@@ -2,6 +2,52 @@
 
 import styled, { css } from "styled-components";
 
+const StyledSelect = styled.div`
+  position: relative;
+  display: inline-block;
+
+  select {
+    display: none; // Hide the original select
+  }
+
+  .custom-select {
+    padding: 10px 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+    width: 200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.2s;
+  }
+
+  .custom-select:hover {
+    border-color: #888;
+  }
+
+  .dropdown-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    max-height: 150px;
+    overflow-y: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  .option {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .option:hover {
+    background-color: #f0f0f0;
+  }
+`;
 const CaptureButton = styled.button`
   background-color: #007bff;
   color: white;
@@ -93,6 +139,24 @@ const ObjectDetectorContainer = styled.div`
   flex-direction: column;
   align-items: center;
 `;
+
+// Styled Components for Loading Indicator
+const LoadingOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+  visibility: ${(props) => (props.visible ? "visible" : "hidden")};
+`;
+
 export {
   ObjectDetectorContainer,
   SelectButton,
@@ -101,4 +165,6 @@ export {
   TargetImg,
   DetectionContainer,
   TargetBox,
+  StyledSelect,
+  LoadingOverlay,
 };
