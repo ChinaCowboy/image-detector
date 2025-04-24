@@ -109,6 +109,11 @@ const HiddenFileInput = styled.input`
 `;
 const TargetImg = styled.img`
   height: 100%;
+  max-height: 400px;
+`;
+const TargetSegImg = styled.img`
+  height: 100%;
+  max-height: 400px;
 `;
 
 const TargetBox = styled.div`
@@ -167,4 +172,5 @@ export {
   TargetBox,
   StyledSelect,
   LoadingOverlay,
+  TargetSegImg,
 };

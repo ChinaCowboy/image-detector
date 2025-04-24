@@ -6,6 +6,7 @@ import {
   TargetImg,
   DetectionContainer,
   LoadingOverlay,
+  TargetSegImg,
 } from "../style"; // Ensure these styled components are defined
 import * as deeplab from "@tensorflow-models/deeplab";
 
@@ -72,8 +73,9 @@ export const ImageSegmentation = () => {
     // Draw each pixel's color based on the segmentation map
     console.log("segmentationMap", segmentationMap);
     for (let i = 0; i < segmentationMap.length; i += 4) {
-      segmentationMap[i + 3] = 128;
+      segmentationMap[i + 3] = 160; // Set alpha channel for transparency
     }
+
     const segmentationMapData = new ImageData(segmentationMap, width, height);
     ctx.putImageData(segmentationMapData, 0, 0);
 
@@ -134,15 +136,27 @@ export const ImageSegmentation = () => {
   const onSelectImage = async (e) => {
     setIsRecognizing(true);
     const file = e.target.files[0];
-    const imgData = await readImage(file);
-    setImgData(imgData);
-    const imageElement = new Image();
-    imageElement.src = imgData;
-
-    imageElement.onload = async () => {
-      await handleSegmentation(imageElement);
+    // Check if a file was selected and if it's an image
+    if (!file || !file.type.startsWith("image/")) {
+      alert("Please select a valid image file.");
       setIsRecognizing(false);
-    };
+      return;
+    }
+    try {
+      const imgData = await readImage(file);
+      setImgData(imgData);
+      const imageElement = new Image();
+      imageElement.src = imgData;
+
+      imageElement.onload = async () => {
+        await handleSegmentation(imageElement);
+        setIsRecognizing(false);
+      };
+    } catch (error) {
+      console.error("Error reading image:", error);
+      alert("Failed to read the image. Please try again.");
+      setIsRecognizing(false);
+    }
   };
 
   const readImage = (file) => {
@@ -159,24 +173,15 @@ export const ImageSegmentation = () => {
       <DetectionContainer
         style={{ position: "relative", display: "inline-block" }}
       >
-        {imgData && (
-          <TargetImg
-            src={imgData}
-            alt="Selected"
-            ref={imageRef}
-            style={{ width: "100%", height: "auto" }}
-          />
-        )}
+        {imgData && <TargetImg src={imgData} alt="Selected" ref={imageRef} />}
         {canvasRef && (
-          <img
+          <TargetSegImg
             src={canvasRef}
             alt="Segmentation Overlay"
             style={{
               position: "absolute",
               top: 0,
               left: 0,
-              width: "100%", // Match the original image size
-              height: "auto", // Maintain aspect ratio
               pointerEvents: "none",
             }}
           />
